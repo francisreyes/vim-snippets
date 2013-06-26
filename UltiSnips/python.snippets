@@ -73,16 +73,8 @@ def write_docstring_args(args, snip):
         snip += format_arg(arg, style)
 
 
-def write_init_body(args, parents, snip):
-    parents = [p.strip() for p in parents.split(",")]
-    parents = [p for p in parents if p != 'object']
-
-    for p in parents:
-        snip += p + ".__init__(self)"
-
-    if parents:
-        snip.rv += '\n' + snip.mkline('', indent='')
-
+def write_init_body(args, parents, snip, cn):
+    snip += "super(" + cn + ", self).__init__(self)"
     for arg in args:
         snip += "self._%s = %s" % (arg, arg)
 
@@ -113,7 +105,7 @@ if args:
     snip.rv += '\n' + snip.mkline('', indent='')
     snip += '"""'
 
-write_init_body(args, t[2], snip)
+write_init_body(args, t[2], snip, t[1])
 `
 		$0
 endsnippet
@@ -140,7 +132,7 @@ if args:
     snip.rv += '\n' + snip.mkline('', indent='')
     snip += '"""'
 
-write_init_body(args, t[2], snip)
+write_init_body(args, t[2], snip, t[1])
 `
 		$0
 endsnippet
